@@ -1,35 +1,34 @@
 import React, { Component }  from 'react';
 import {connect} from "react-redux";
-import {Glyphicon, Panel, ListGroup, ListGroupItem, ControlLabel} from 'react-bootstrap'
+import { Glyphicon, Panel, ListGroup, ListGroupItem, Form, FormGroup, Col, ControlLabel, FormControl, Button,} from 'react-bootstrap'
 import { Image } from 'react-bootstrap'
 import { withRouter } from "react-router-dom";
 import {fetchMovie} from "../actions/movieActions";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-import Form from "react-bootstrap/es/Form";
-import FormGroup from "react-bootstrap/es/FormGroup";
-import Col from "react-bootstrap/es/Col";
-import FormControl from "react-bootstrap/es/FormControl";
-import Button from "react-bootstrap/es/Button";
+
 //support routing by creating a new component
 
 class Movie extends Component {
+
     constructor(props) {
         super(props);
         this.updateDetails = this.updateDetails.bind(this);
-        this.commentSub = this.commentSub.bind(this);
+        this.reviewSub = this.reviewSub.bind(this);
 
         this.state = {
             details:{
                 review: '',
-                rating: 0
+                rating: 5
             }
         };
     }
+
     componentDidMount() {
         const {dispatch} = this.props;
         if (this.props.selectedMovie == null)
-            dispatch(fetchMovie(this.props.movieId));
+            dispatch(fetchMovie(this.props.movieid));
     }
+
     updateDetails(event){
         let updateDetails = Object.assign({}, this.state.details);
 
@@ -39,14 +38,13 @@ class Movie extends Component {
         });
     }
 
-
-    commentSub() {
+    reviewSub() {
         const env = runtimeEnv();
 
         var json = {
             review: this.state.details.review,
             rating: this.state.details.rating,
-            movie: this.props.movie
+            movieid: this.props.movieid
         };
 
         return fetch(`${env.REACT_APP_API_URL}/comments`, {
@@ -72,19 +70,21 @@ class Movie extends Component {
     }
 
     render() {
-        const ActorInfo = ({actors}) => {
-            return actors.map((actor, i) =>
+        const ActorInfo = ({Actors}) => {
+            return Actors.map((actor, i) =>
                 <p key={i}>
-                    <b>{actor.actorName}</b> {actor.characterName}
+                    <b>{actor.FirstActorname}</b> {actor.FirstCharacterName}
+                   // <b>{actor.SecondActorname}</b> {actor.SecondCharacterName}
+                    <b>{actor.ThirdActorname}</b> {actor.ThirdCharacterName}
                 </p>
             );
         };
 
-        const ReviewInfo = ({reviews}) => {
-            return reviews.map((review, i) =>
+        const ReviewInfo = ({Reviews}) => {
+            return Reviews.map((com, i) =>
                 <p key={i}>
-                <b>{review.username}</b> {review.review}
-                    <Glyphicon glyph={'star'} /> {review.rating}
+                    <b>{com.user}</b> {com.comment}
+                    <Glyphicon glyph={'star'} /> {com.rate}
                 </p>
             );
         };
@@ -96,13 +96,13 @@ class Movie extends Component {
             return (
                 <Panel>
                     <Panel.Heading>Movie Detail</Panel.Heading>
-                    <Panel.Body><Image className="image" src={currentMovie.imageUrl} thumbnail /></Panel.Body>
+                    <Panel.Body><Image className="image" src={currentMovie.ImageUrl} thumbnail /></Panel.Body>
                     <ListGroup>
                         <ListGroupItem>{currentMovie.title}</ListGroupItem>
-                        <ListGroupItem><ActorInfo actors={currentMovie.actors} /></ListGroupItem>
-                        <ListGroupItem><h4><Glyphicon glyph={'star'} /> {currentMovie.avgRating} </h4></ListGroupItem>
+                        <ListGroupItem><ActorInfo actors={currentMovie.Actors} /></ListGroupItem>
+                        <ListGroupItem><h4><Glyphicon glyph={'star'} /> {currentMovie.averageRating} </h4></ListGroupItem>
                     </ListGroup>
-                    <Panel.Body><ReviewInfo reviews={currentMovie.reviews} /></Panel.Body>
+                    <Panel.Body><ReviewInfo review={currentMovie.comment} /></Panel.Body>
                 </Panel>
             );
         };
@@ -112,17 +112,14 @@ class Movie extends Component {
                 <DetailInfo currentMovie={this.props.selectedMovie} />
                 <Form horizontal>
                     <FormGroup controlId="review">
-                        <Panel.Heading>Your Comment Here :</Panel.Heading>
-                        <Col componentClass={ControlLabel} sm={20}>
-                            <div className="form-group">
-                        <textarea rows="5" cols="90">
-                        </textarea>
-                            </div>
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Review
                         </Col>
                         <Col sm={10}>
-                            <FormControl onChange={this.updateDetails} value={this.state.details.review} type="text" placeholder="type review here..." />
+                            <FormControl onChange={this.updateDetails} value={this.state.details.review} type="text" placeholder="type review" />
                         </Col>
                     </FormGroup>
+
                     <FormGroup controlId="rating">
                         <Col componentClass={ControlLabel} sm={2}>
                             Rating
@@ -136,13 +133,12 @@ class Movie extends Component {
 
                     <FormGroup>
                         <Col smOffset={2} sm={10}>
-                            <Button onClick={this.commentSub}>Submit</Button>
+                            <Button onClick={this.reviewSub}>Submit</Button>
                         </Col>
                     </FormGroup>
                 </Form>
 
             </div>
-
         );
     }
 }
@@ -151,7 +147,7 @@ const mapStateToProps = (state, ownProps) => {
     console.log(ownProps);
     return {
         selectedMovie: state.movie.selectedMovie,
-        movieId: ownProps.match.params.movieId
+        movieid: ownProps.match.params.movieid
     }
 };
 

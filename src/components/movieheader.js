@@ -17,7 +17,7 @@ class MovieHeader extends Component {
                 <Navbar>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            Movie App
+                            Movie&Review App
                         </Navbar.Brand>
                     </Navbar.Header>
                     <Nav>
@@ -47,6 +47,6 @@ const mapStateToProps = state => {
         username: state.auth.username,
         selectedMovie: state.movie.selectedMovie,
     }
-}
+};
 
 export default withRouter(connect(mapStateToProps)(MovieHeader));
