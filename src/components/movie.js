@@ -74,8 +74,6 @@ class Movie extends Component {
             return Actors.map((actor, i) =>
                 <p key={i}>
                     <b>{actor.FirstActorname}</b> {actor.FirstCharacterName}
-                   // <b>{actor.SecondActorname}</b> {actor.SecondCharacterName}
-                    <b>{actor.ThirdActorname}</b> {actor.ThirdCharacterName}
                 </p>
             );
         };
@@ -102,7 +100,7 @@ class Movie extends Component {
                         <ListGroupItem><ActorInfo actors={currentMovie.Actors} /></ListGroupItem>
                         <ListGroupItem><h4><Glyphicon glyph={'star'} /> {currentMovie.averageRating} </h4></ListGroupItem>
                     </ListGroup>
-                    <Panel.Body><ReviewInfo review={currentMovie.comment} /></Panel.Body>
+                    <Panel.Body><ReviewInfo review={currentMovie.Reviews} /></Panel.Body>
                 </Panel>
             );
         };

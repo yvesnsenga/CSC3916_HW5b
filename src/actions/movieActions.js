@@ -15,10 +15,10 @@ function movieFetched(movie){
     }
 }
 
-function movieSet(movie){
+function movieSet(movies){
     return {
         type: actionTypes.SET_MOVIE,
-        selectedMovie: movie
+        selectedMovie: movies
     }
 }
 

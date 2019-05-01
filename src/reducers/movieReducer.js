@@ -3,7 +3,7 @@ import constants from '../constants/actionTypes'
 var initialState = {
     movies: [],
     selectedMovie: null
-}
+};
 
 export default (state = initialState, action) => {
 
