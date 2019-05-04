@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
 
     switch(action.type) {
         case constants.FETCH_MOVIES:
-            updated['movies'] = action.movies;
+            updated['movie'] = action.movies;
             updated['selectedMovie'] = action.movies[0];
             return updated;
         case constants.SET_MOVIE:
