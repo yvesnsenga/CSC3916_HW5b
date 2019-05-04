@@ -20,6 +20,10 @@ class Movie extends Component {
             return Actors.map((actor, i) =>
                 <p key={i}>
                     <b>{actor.FirstActorname}</b> {actor.FirstCharacterName}
+                    <p>{}</p>
+                    <b>{actor.SecondActorname}</b> {actor.SecondCharacterName}
+                    <p>{}</p>
+                    <b>{actor.ThirdActorname}</b> {actor.ThirdCharacterName}
                 </p>
             );
         };
@@ -43,10 +47,10 @@ class Movie extends Component {
                     <Panel.Body><Image className="image" src={currentMovie.ImageUrl} thumbnail /></Panel.Body>
                     <ListGroup>
                         <ListGroupItem>{currentMovie.title}</ListGroupItem>
-                        <ListGroupItem><ActorInfo actors={currentMovie.Actors} /></ListGroupItem>
+                        <ListGroupItem><ActorInfo Actors={currentMovie.Actors} /></ListGroupItem>
                         <ListGroupItem><h4><Glyphicon glyph={'star'} /> {currentMovie.avgRating} </h4></ListGroupItem>
                     </ListGroup>
-                    <Panel.Body><ReviewInfo reviews={currentMovie.Reviews} /></Panel.Body>
+                    <Panel.Body><ReviewInfo Reviews={currentMovie.Reviews} /></Panel.Body>
                 </Panel>
             );
         };
