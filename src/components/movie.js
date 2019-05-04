@@ -14,18 +14,7 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 
 class Movie extends Component {
 
-    constructor(prop)
-    {
-        super(prop);
-        this.updateDetails = this.updateDetails.bind(this);
-        this.reviewSub = this.reviewSub.bind(this);
-        this.state={
-            deatils:{
-                review: '',
-                rating: 0
-            }
-        };
-    }
+
     componentDidMount() {
         const {dispatch} = this.props;
         if (this.props.selectedMovie == null)
@@ -38,37 +27,6 @@ class Movie extends Component {
         this.setState({
             details: updateDetails
         });
-    }
-
-    reviewSub() {
-        const env = runtimeEnv();
-
-        var json = {
-            Review: this.state.details.review,
-            Rating: this.state.details.rating,
-            Movie_ID: this.props.movieId
-        };
-
-        return fetch(`${env.REACT_APP_API_URL}/comments`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token')
-            },
-            body: JSON.stringify(json),
-            mode: 'cors'})
-            .then( (response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response.json();
-            })
-            .then( (res) => {
-                window.location.reload();
-            })
-            .catch( (e) => console.log(e) );
-
     }
 
     render() {
@@ -113,25 +71,12 @@ class Movie extends Component {
                 </Panel>
             );
         };
-
-
         return (
-            <div>
-                <DetailInfo currentMovie={this.props.selectedMovie} />
-                <Form horizontal>
-                    <FormGroup controlId="comment">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Review
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl onChange={this.updateDetails} value={this.state.details.comment} type="text" placeholder="type review here..." />
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </div>
-        )
+            <DetailInfo currentMovie={this.props.selectedMovie}/>
+        );
     }
 }
+
 
 const mapStateToProps = (state, ownProps) => {
     console.log(ownProps);
