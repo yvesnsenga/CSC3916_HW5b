@@ -119,12 +119,12 @@ class Movie extends Component {
             <div>
                 <DetailInfo currentMovie={this.props.selectedMovie} />
                 <Form horizontal>
-                    <FormGroup controlId="review">
+                    <FormGroup controlId="comment">
                         <Col componentClass={ControlLabel} sm={2}>
                             Review
                         </Col>
                         <Col sm={10}>
-                            <FormControl onChange={this.updateDetails} value={this.state.details.review} type="text" placeholder="type review here..." />
+                            <FormControl onChange={this.updateDetails} value={this.state.details.comment} type="text" placeholder="type review here..." />
                         </Col>
                     </FormGroup>
                 </Form>
