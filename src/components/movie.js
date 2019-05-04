@@ -4,29 +4,14 @@ import { Glyphicon, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { Image } from 'react-bootstrap'
 import { withRouter } from "react-router-dom";
 import {fetchMovie} from "../actions/movieActions";
-import FormControl from "react-bootstrap/es/FormControl";
-import Col from "react-bootstrap/es/Col";
-import FormGroup from "react-bootstrap/es/FormGroup";
-import Form from "react-bootstrap/es/Form";
-import ControlLabel from "react-bootstrap/es/ControlLabel";
-import runtimeEnv from "@mars/heroku-js-runtime-env";
 //support routing by creating a new component
 
 class Movie extends Component {
 
-
     componentDidMount() {
         const {dispatch} = this.props;
         if (this.props.selectedMovie == null)
-            dispatch(fetchMovie(this.props.movieid));
-    }
-    updateDetails(event){
-        let updateDetails = Object.assign({}, this.state.details);
-
-        updateDetails[event.target.id] = event.target.value;
-        this.setState({
-            details: updateDetails
-        });
+            dispatch(fetchMovie(this.props.movieId));
     }
 
     render() {
