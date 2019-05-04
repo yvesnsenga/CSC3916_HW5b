@@ -4,15 +4,71 @@ import { Glyphicon, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { Image } from 'react-bootstrap'
 import { withRouter } from "react-router-dom";
 import {fetchMovie} from "../actions/movieActions";
-
+import FormControl from "react-bootstrap/es/FormControl";
+import Col from "react-bootstrap/es/Col";
+import FormGroup from "react-bootstrap/es/FormGroup";
+import Form from "react-bootstrap/es/Form";
+import ControlLabel from "react-bootstrap/es/ControlLabel";
+import runtimeEnv from "@mars/heroku-js-runtime-env";
 //support routing by creating a new component
 
 class Movie extends Component {
 
+    constructor(prop)
+    {
+        super(prop);
+        this.updateDetails = this.updateDetails.bind(this);
+        this.reviewSub = this.reviewSub.bind(this);
+        this.state={
+            deatils:{
+                review: '',
+                rating: 0
+            }
+        };
+    }
     componentDidMount() {
         const {dispatch} = this.props;
         if (this.props.selectedMovie == null)
             dispatch(fetchMovie(this.props.movieid));
+    }
+    updateDetails(event){
+        let updateDetails = Object.assign({}, this.state.details);
+
+        updateDetails[event.target.id] = event.target.value;
+        this.setState({
+            details: updateDetails
+        });
+    }
+
+    reviewSub() {
+        const env = runtimeEnv();
+
+        var json = {
+            Review: this.state.details.review,
+            Rating: this.state.details.rating,
+            Movie_ID: this.props.movieId
+        };
+
+        return fetch(`${env.REACT_APP_API_URL}/comments`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify(json),
+            mode: 'cors'})
+            .then( (response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then( (res) => {
+                window.location.reload();
+            })
+            .catch( (e) => console.log(e) );
+
     }
 
     render() {
@@ -31,7 +87,10 @@ class Movie extends Component {
         const ReviewInfo = ({Reviews}) => {
             return Reviews.map((review, i) =>
                 <p key={i}>
-                    <b>{review.user}</b> {review.comment}
+                    <b>{review.user}</b> {''}
+                    <p>{}</p>
+                    <b>{review.comment}</b>{''}
+                    <p>{}</p>
                     <Glyphicon glyph={'star'} /> {review.rate}
                 </p>
             );
@@ -54,9 +113,23 @@ class Movie extends Component {
                 </Panel>
             );
         };
+
+
         return (
-            <DetailInfo currentMovie={this.props.selectedMovie} />
-        );
+            <div>
+                <DetailInfo currentMovie={this.props.selectedMovie} />
+                <Form horizontal>
+                    <FormGroup controlId="review">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Review
+                        </Col>
+                        <Col sm={10}>
+                            <FormControl onChange={this.updateDetails} value={this.state.details.review} type="text" placeholder="type review here..." />
+                        </Col>
+                    </FormGroup>
+                </Form>
+            </div>
+        )
     }
 }
 
